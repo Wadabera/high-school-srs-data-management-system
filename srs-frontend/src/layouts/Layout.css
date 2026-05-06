@@ -1,0 +1,346 @@
+/* Top Header Layouts */
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  background: var(--card-bg);
+  border-bottom: 4px solid var(--heavy-border);
+  padding: 0 40px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.top-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.top-nav a {
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  padding: 10px 15px;
+  border: 2px solid transparent;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-nav a:hover, .top-nav a.active {
+  border-color: var(--heavy-border);
+  box-shadow: 4px 4px 0px rgba(0,0,0,1);
+  transform: translate(-2px, -2px);
+  background: white;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  padding: 5px 15px;
+  border: 2px solid var(--heavy-border);
+  border-radius: 40px;
+  box-shadow: 4px 4px 0px rgba(0,0,0,1);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--light);
+  border: 2px solid var(--primary);
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.user-name {
+  font-weight: 800;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-logout {
+  background: var(--danger);
+  color: white;
+  border: 2px solid var(--heavy-border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 30px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.btn-logout:hover {
+  background: white;
+  color: var(--danger);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
+.main-content {
+  flex: 1;
+  padding: 50px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar Layout (Shared for Admin, Teacher, Student) */
+.sidebar-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  border-right: 4px solid var(--heavy-border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-header {
+  padding: 30px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+.sidebar-header h2 {
+  color: white;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.sidebar-nav {
+  padding: 30px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 30px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: white;
+  color: var(--primary);
+  border-right: 8px solid var(--secondary);
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--light);
+}
+
+.main-header {
+  height: 80px;
+  background: var(--card-bg);
+  border-bottom: 4px solid var(--heavy-border);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  justify-content: flex-end;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.main-content {
+  padding: 50px;
+  flex: 1;
+}
+
+
+/* Responsive Layouts */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .top-header {
+    padding: 0 20px;
+  }
+  
+  .top-nav {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: var(--card-bg);
+    transition: var(--transition);
+    border-top: 4px solid var(--heavy-border);
+    padding: 40px;
+    z-index: 1000;
+  }
+  
+  .top-nav.open {
+    left: 0;
+  }
+  
+  .top-nav ul {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .top-nav a {
+    font-size: 1.2rem;
+    padding: 15px 20px;
+  }
+  
+  .mobile-toggle {
+    display: block;
+  }
+  
+  .user-section {
+    display: none; /* Hide on mobile to save space, or move inside menu */
+  }
+
+  .main-content {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 1.4rem;
+  }
+  
+  /* Admin Sidebar Responsiveness */
+  .admin-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 4px solid var(--heavy-border);
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  
+  .nav-item {
+    padding: 10px 20px;
+    white-space: nowrap;
+  }
+  
+  .admin-header {
+    padding: 0 20px;
+  }
+  
+  .admin-content {
+    padding: 20px;
+  }
+}
+
+/* Admin Sidebar Responsiveness Refined */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+.sidebar-close {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100% !important;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: var(--transition);
+    width: 280px !important;
+  }
+  
+  .sidebar.open {
+    left: 0 !important;
+  }
+  
+  .sidebar-close {
+    display: block;
+    margin-left: auto;
+  }
+
+  .admin-header {
+    justify-content: space-between;
+  }
+}
