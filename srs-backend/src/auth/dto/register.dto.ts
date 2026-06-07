@@ -1,6 +1,6 @@
 import { IsString, IsEmail, IsNotEmpty, IsOptional, IsEnum, Matches } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   fullname: string;
@@ -21,10 +21,8 @@ export class CreateUserDto {
 
   @IsEnum(['student', 'teacher', 'director'])
   @IsNotEmpty()
-  role: string;
-}
+  role: 'student' | 'teacher' | 'director';
 
-export class CreateStudentDto extends CreateUserDto {
   @IsOptional()
   @IsString()
   phone?: string;
@@ -43,25 +41,7 @@ export class CreateStudentDto extends CreateUserDto {
 
   @IsOptional()
   @IsString()
-  photo?: string;
-}
-
-export class CreateTeacherDto extends CreateUserDto {
-  @IsOptional()
-  @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
-  stream?: string;
-
-  @IsOptional()
-  @IsString()
   subjectCode?: string;
-
-  @IsOptional()
-  @IsString()
-  grade?: string;
 
   @IsOptional()
   @IsString()
@@ -74,27 +54,4 @@ export class CreateTeacherDto extends CreateUserDto {
   @IsOptional()
   @IsString()
   photo?: string;
-}
-
-export class CreateDirectorDto extends CreateUserDto {
-  @IsOptional()
-  @IsString()
-  photo?: string;
-}
-
-export class ForgotPasswordDto {
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-}
-
-export class ResetPasswordDto {
-  @IsString()
-  @IsNotEmpty()
-  token: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^.{8,}$/)
-  newPassword: string;
 }

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
     origin: ['http://localhost:5173', 'http://localhost:3000'],
     credentials: true,
   });
+
+  app.use(helmet());
 
   app.useGlobalPipes(
     new ValidationPipe({

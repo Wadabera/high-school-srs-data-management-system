@@ -81,7 +81,6 @@
   color: var(--primary);
 }
 
-/* Right Side Form */
 .login-right {
   flex: 1;
   display: flex;
@@ -89,9 +88,9 @@
   justify-content: center;
   padding: 40px;
   background: var(--card-bg);
-  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-image: radial-gradient(rgba(34,197,94,0.18) 1px, transparent 1px);
   background-size: 20px 20px;
-  background-color: #f0f0f0;
+  background-color: var(--light);
 }
 
 .login-form-box {
@@ -194,11 +193,54 @@
   letter-spacing: 1px;
 }
 
+.login-footer a {
+  color: var(--secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.login-footer a:hover {
+  border-bottom-color: var(--secondary);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-bottom: 2px solid transparent;
+}
+
+.back-link:hover {
+  border-bottom-color: var(--secondary);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
 @media (max-width: 900px) {
   .login-container {
     flex-direction: column;
   }
   .login-left {
     padding: 40px 20px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 320px) {
+  .login-form-box {
+    padding: 25px 20px;
+  }
+  .brand-section h1 {
+    font-size: 2.5rem;
   }
 }

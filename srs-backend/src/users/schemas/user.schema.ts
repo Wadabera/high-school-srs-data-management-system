@@ -25,6 +25,9 @@ export class User {
 
   @Prop()
   banner: string;
+
+  @Prop()
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,14 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -26,13 +31,72 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
     const payload = { username: user.username, sub: user._id, role: user.role };
+    
+    const access_token = this.jwtService.sign(payload);
+    const refresh_token = this.jwtService.sign(
+      { ...payload, tokenType: 'refresh' },
+      {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+        expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRY') || '7d',
+      } as any,
+    );
+
+    await this.usersService.saveRefreshToken(user._id, refresh_token);
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token,
+      refresh_token,
       user: {
         username: user.username,
         role: user.role,
         fullname: user.fullname
       }
     };
+  }
+
+  async register(registerDto: RegisterDto) {
+    if (registerDto.role === 'student') {
+      return this.usersService.createStudent(registerDto as any);
+    } else if (registerDto.role === 'teacher') {
+      return this.usersService.createTeacher(registerDto as any);
+    } else if (registerDto.role === 'director') {
+      return this.usersService.createDirector(registerDto as any);
+    }
+    throw new BadRequestException('Invalid role');
+  }
+
+  async logout(userId: string) {
+    await this.usersService.removeRefreshToken(userId);
+    return { success: true, message: 'Logged out successfully' };
+  }
+
+  async refreshToken(refresh_token: string) {
+    try {
+      const payload = this.jwtService.verify(refresh_token, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+      });
+
+      if (payload.tokenType !== 'refresh') {
+        throw new UnauthorizedException('Invalid token type');
+      }
+
+      const user = await this.usersService.findById(payload.sub);
+      if (!user || !user.refreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const isValid = await bcrypt.compare(refresh_token, user.refreshToken);
+      if (!isValid) {
+        throw new UnauthorizedException('Refresh token expired or invalid');
+      }
+
+      const newPayload = { username: user.username, sub: user._id, role: user.role };
+      const access_token = this.jwtService.sign(newPayload);
+
+      return { access_token };
+    } catch (error) {
+      this.logger.error('Token refresh error', error);
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 }

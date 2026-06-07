@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { User, UserDocument } from './schemas/user.schema';
 import { Student, StudentDocument } from './schemas/student.schema';
 import { Teacher, TeacherDocument } from './schemas/teacher.schema';
@@ -21,6 +21,10 @@ export class UsersService {
     return this.userModel.findOne({ username }).exec();
   }
 
+  async findById(id: string): Promise<UserDocument | null> {
+    return this.userModel.findById(id).exec();
+  }
+
   async getProfile(username: string, role: string) {
     if (role === 'student') {
       return this.studentModel.findOne({ username }).exec();
@@ -33,9 +37,6 @@ export class UsersService {
   }
 
   private async generateNextId(model: Model<any>, idField: string, startFrom: number): Promise<string> {
-    // Find the document with the highest id, sort descending
-    // Note: since id might be stored as string but actually numeric, we might need to sort correctly or fetch all and math max.
-    // Assuming the IDs are numeric strings like '1000'
     const docs = await model.find().select(idField).exec();
     if (!docs || docs.length === 0) {
       return startFrom.toString();
@@ -85,8 +86,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(createTeacherDto.password || '12345678', 10);
     const nextId = await this.generateNextId(this.teacherModel, 'teacherId', 100);
 
-    // Split classes string 'A, B' -> ['A', 'B']
-    const classesArray = createTeacherDto.classes.replace(/\s/g, '').split(',');
+    const classesArray = (createTeacherDto.classes || '').replace(/\s/g, '').split(',').filter(Boolean);
 
     const user = new this.userModel({
       fullname: createTeacherDto.fullname,
@@ -157,7 +157,7 @@ export class UsersService {
     return {
       totalStudents,
       totalTeachers,
-      totalUsers: totalStudents + totalTeachers, // Keeping it matching the original PHP
+      totalUsers: totalStudents + totalTeachers,
     };
   }
 
@@ -174,7 +174,6 @@ export class UsersService {
   }
 
   async deleteUser(type: string, id: string) {
-    // We need to find the user by ID in their specific collection to get their username
     let username = '';
     if (type === 'student') {
       const s = await this.studentModel.findOneAndDelete({ studentId: id }).exec();
@@ -192,9 +191,8 @@ export class UsersService {
     }
     return { success: true };
   }
+
   async updateProfile(username: string, role: string, updateData: any) {
-    console.log(`UsersService: Updating profile for ${username} (${role}). Fields:`, Object.keys(updateData));
-    // 1. Update User model (generic fields)
     const userUpdate: any = {};
     if (updateData.fullname) userUpdate.fullname = updateData.fullname;
     if (updateData.email) userUpdate.email = updateData.email;
@@ -205,9 +203,8 @@ export class UsersService {
     }
     await this.userModel.findOneAndUpdate({ username }, userUpdate).exec();
 
-    // 2. Update role-specific model
     const specificUpdate: any = { ...updateData };
-    delete specificUpdate.password; // Don't store plain password in specific models if any
+    delete specificUpdate.password;
 
     if (role === 'student') {
       return this.studentModel.findOneAndUpdate({ username }, specificUpdate, { new: true }).exec();
@@ -217,5 +214,14 @@ export class UsersService {
       return this.directorModel.findOneAndUpdate({ username }, specificUpdate, { new: true }).exec();
     }
     throw new BadRequestException('Invalid role');
+  }
+
+  async saveRefreshToken(userId: string, refreshToken: string) {
+    const hashedToken = await bcrypt.hash(refreshToken, 10);
+    await this.userModel.findByIdAndUpdate(userId, { refreshToken: hashedToken }).exec();
+  }
+
+  async removeRefreshToken(userId: string) {
+    await this.userModel.findByIdAndUpdate(userId, { $unset: { refreshToken: 1 } }).exec();
   }
 }

@@ -48,14 +48,14 @@
 }
 
 .btn-enter {
-  background: var(--primary);
-  color: white !important;
+  background: var(--brand-green);
+  color: #04210f !important;
   padding: 12px 25px;
   border-radius: 40px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
 }
 
 .hero-section {
@@ -142,6 +142,7 @@
 .stat-item h2 {
   font-size: 3.5rem;
   margin-bottom: 5px;
+  color: var(--brand-green-light);
 }
 
 .stat-item p {
@@ -152,7 +153,7 @@
 
 .features-section {
   padding: 120px 80px;
-  background: #f8fafc;
+  background: var(--light);
 }
 
 .section-header {
@@ -250,7 +251,7 @@
 
 .landing-footer {
   padding: 60px 80px;
-  background: #0f172a;
+  background: var(--brand-black);
   color: white;
   text-align: center;
   font-weight: 600;
@@ -265,4 +266,36 @@
   .features-section { padding: 80px 40px; }
   .about-section { grid-template-columns: 1fr; padding: 80px 40px; }
   .contact-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .landing-nav { padding: 15px 20px; }
+  .landing-nav-links { gap: 20px; }
+  .hero-section { padding: 40px 20px; min-height: 60vh; }
+  .hero-content h1 { font-size: 2.5rem; }
+  .hero-card { width: 280px; padding: 30px; transform: none; }
+  .hero-circle { width: 300px; height: 300px; }
+  .stats-section { grid-template-columns: 1fr; padding: 40px 20px; }
+  .stat-item h2 { font-size: 2.5rem; }
+  .features-section { padding: 60px 20px; }
+  .feature-card-landing { padding: 25px; }
+  .about-section { padding: 60px 20px; }
+  .contact-section { padding: 60px 20px; }
+  .landing-footer { padding: 40px 20px; }
+}
+
+@media (max-width: 480px) {
+  .landing-nav-links a { font-size: 0.75rem; }
+  .hero-content h1 { font-size: 2rem; }
+  .hero-badge { font-size: 0.7rem; padding: 6px 16px; }
+  .stat-item h2 { font-size: 2rem; }
+  .section-header h2 { font-size: 2.5rem; }
+}
+
+@media (max-width: 320px) {
+  .hero-content h1 { font-size: 1.5rem; }
+  .hero-card { width: 240px; padding: 20px; }
+  .stat-item h2 { font-size: 1.8rem; }
+  .section-header h2 { font-size: 2rem; }
+  .feature-card-landing h3 { font-size: 1.2rem; }
 }

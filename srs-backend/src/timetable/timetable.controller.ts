@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { TimetableService } from './timetable.service';
+import { CreateTimetableDto } from './dto/create-timetable.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('timetable')
@@ -8,7 +9,7 @@ export class TimetableController {
   constructor(private readonly timetableService: TimetableService) {}
 
   @Post()
-  create(@Body() createDto: any) {
+  create(@Body() createDto: CreateTimetableDto) {
     return this.timetableService.create(createDto);
   }
 

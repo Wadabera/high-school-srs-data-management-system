@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GraduationCap, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import './Login.css';
@@ -108,7 +109,7 @@ export default function Login() {
                 <span className="checkmark"></span>
                 Remember me
               </label>
-              <a href="#" className="forgot-password">Forgot Password?</a>
+              <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
             </div>
             
             <button type="submit" className="btn btn-primary btn-submit" disabled={isLoading}>
@@ -117,7 +118,7 @@ export default function Login() {
           </form>
           
           <div className="login-footer">
-            <p>&copy; 2025 SRS System. All rights reserved.</p>
+            <p>Don't have an account? <Link to="/register">Sign up</Link></p>
           </div>
         </div>
       </div>

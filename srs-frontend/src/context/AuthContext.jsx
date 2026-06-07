@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           localStorage.removeItem('srs_token');
           localStorage.removeItem('srs_role');
+          localStorage.removeItem('srs_refresh_token');
           setUser(null);
         }
       }
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post('/auth/login', { username, password });
       localStorage.setItem('srs_token', res.data.access_token);
+      localStorage.setItem('srs_refresh_token', res.data.refresh_token);
       localStorage.setItem('srs_role', res.data.user.role);
       setUser(res.data.user);
       
@@ -44,9 +46,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const refreshToken = localStorage.getItem('srs_refresh_token');
+    if (refreshToken) {
+      try {
+        await api.post('/auth/logout', { refresh_token: refreshToken });
+      } catch (e) {
+        // Ignore logout errors
+      }
+    }
     localStorage.removeItem('srs_token');
     localStorage.removeItem('srs_role');
+    localStorage.removeItem('srs_refresh_token');
     setUser(null);
     navigate('/');
   };

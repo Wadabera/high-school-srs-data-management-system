@@ -1,44 +1,66 @@
 # Student Registration System (SRS) Migration
 
-This project has been successfully migrated from PHP/MySQL to a modern full-stack web application using React, NestJS, and MongoDB.
+A modern full-stack web application using React, NestJS, and MongoDB Atlas.
 
 ## Technologies Used
 
-*   **Frontend:** React (Vite), React Router, Lucide Icons, Modern Vanilla CSS (with CSS variables and theming).
-*   **Backend:** NestJS, TypeScript, Mongoose, Passport (JWT Auth), Bcrypt.
-*   **Database:** MongoDB Atlas (Cloud).
+- **Frontend:** React (Vite), React Router, Lucide Icons, Modern Vanilla CSS (CSS variables, glassmorphism, responsive design)
+- **Backend:** NestJS, TypeScript, Mongoose, Passport (JWT Auth), bcryptjs
+- **Database:** MongoDB Atlas (Cloud)
 
 ## Project Structure
 
-*   `/srs-backend` - The NestJS backend application.
-*   `/srs-frontend` - The React frontend application.
+- `/srs-backend` - The NestJS backend application
+- `/srs-frontend` - The React frontend application
+
+## Environment Variables
+
+Create `.env` file in `srs-backend/`:
+
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority
+JWT_SECRET=your-super-secret-jwt-key-min-32-chars
+JWT_EXPIRY=1d
+JWT_REFRESH_SECRET=your-refresh-secret-key-min-32-chars
+JWT_REFRESH_EXPIRY=7d
+PORT=5000
+```
 
 ## How to Run the Application
 
-You will need two separate terminal windows to run both the frontend and the backend simultaneously.
-
-### 1. Start the Backend Server
 ```bash
+# Terminal 1 - Backend
 cd srs-backend
 npm install
 npm run start:dev
-```
-The backend API will be running on `http://localhost:5000`.
 
-### 2. Start the Frontend Server
-```bash
+# Terminal 2 - Frontend
 cd srs-frontend
 npm install
 npm run dev
 ```
-The React frontend will be running on `http://localhost:5173`. Open this URL in your browser.
+
+Backend: `http://localhost:5000`
+Frontend: `http://localhost:5173`
 
 ## Features Completed
-✅ **Authentication:** JWT-based login with role-based redirection.
-✅ **Modern UI/UX:** A rich, aesthetic, and responsive design utilizing glassmorphism, micro-animations, and dynamic layouts.
-✅ **MongoDB Integration:** Full mapping of all previous relational MySQL tables into NoSQL collections.
-✅ **Modular Backend:** Clean architecture utilizing Controllers, Services, and Modules in NestJS.
-✅ **Protected Routes:** Secured frontend routing via AuthContext to prevent unauthorized access.
 
-### Next Steps for the User
-* To continue building out the specific sub-pages (e.g., Manage Marks, Create Columns), simply follow the pattern established in the `pages` directory. The NestJS backend APIs are already fully scaffolded to handle the data for these pages!
+### Authentication
+- JWT-based login with access tokens
+- Refresh token support for session management
+- User registration for students, teachers, and directors
+- Role-based access control
+- Password hashing with bcryptjs
+
+### Security
+- Helmet for XSS protection
+- Input validation with class-validator
+- Environment variable validation
+- MongoDB connection retry mechanism
+
+### UI/UX
+- Responsive design (320px, 480px, 768px, 1024px breakpoints)
+- Glassmorphism effects
+- Modern brutal-style cards
+- Form validation and error handling
+- Registration and forgot password pages
