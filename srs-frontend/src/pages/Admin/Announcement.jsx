@@ -20,7 +20,9 @@ export default function AdminAnnouncement() {
       await api.post('/announcements', formData);
       setFormData({ title: '', body: '', announcementFor: 'student' });
       fetchAnnouncements();
-    } catch (err) { alert('Error posting announcement'); }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error posting announcement');
+    }
   };
 
   return (

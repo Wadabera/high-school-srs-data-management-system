@@ -14,7 +14,10 @@ export class AnnouncementsService {
   }
 
   async findAll(forRole?: string): Promise<Announcement[]> {
-    const filter = forRole ? { announcementFor: forRole } : {};
+    // A role-targeted query also returns 'all' (broadcast-to-everyone) announcements.
+    const filter = forRole
+      ? { announcementFor: { $in: [forRole, 'all'] } }
+      : {};
     return this.announcementModel.find(filter).sort({ _id: -1 }).exec();
   }
 }

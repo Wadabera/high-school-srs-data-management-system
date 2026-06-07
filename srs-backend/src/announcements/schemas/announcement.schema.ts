@@ -11,7 +11,7 @@ export class Announcement {
   @Prop({ required: true })
   body: string;
 
-  @Prop({ required: true, enum: ['student', 'teacher'] })
+  @Prop({ required: true, enum: ['student', 'teacher', 'all'] })
   announcementFor: string;
 }
 

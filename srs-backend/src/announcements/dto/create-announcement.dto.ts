@@ -9,7 +9,7 @@ export class CreateAnnouncementDto {
   @IsNotEmpty()
   body: string;
 
-  @IsEnum(['student', 'teacher'])
+  @IsEnum(['student', 'teacher', 'all'])
   @IsNotEmpty()
   announcementFor: string;
 }
